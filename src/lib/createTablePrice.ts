@@ -13,12 +13,12 @@ function printProducts(productsForm: Product): PrintProduct[] {
     const printProducts: PrintProduct[] = []
 
     productsKeys.forEach(key => {
-        const id = Number(key.substring(7))
+        const product = products.find((item) => item.id === key.substring(7))
         const priceSuggested = productsForm[key]?.suggested || '0'
 
         if (Number(priceSuggested) > 0) {
             printProducts.push({
-                name: products[id],
+                name: product?.name || 'Desconhecido',
                 price: imaskCurrency(priceSuggested)
             })
         }
@@ -28,8 +28,7 @@ function printProducts(productsForm: Product): PrintProduct[] {
 }
 
 export function createTablePrice(productsForm: Product) {
-    const productsList = printProducts(productsForm)
-    console.log(productsList)
+    const productsList = printProducts(productsForm).sort((a, b) => a.name.localeCompare(b.name))
 
     let html = `<html><head><style>*{margin:0;padding:0;font-size:18px}body{max-width:90mm;width:95%;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}.content{display:flex;flex-direction:column;gap:10px}.price{text-align:right;min-width:100px}table,tbody,td,tfoot,th,thead,tr{border-collapse:collapse;border:1px solid #000;padding:5px}</style></head><body><div class="content"><table><thead><th>Produto</th><th>Preço (KG)</th></thead><tbody>`
 

@@ -1,23 +1,20 @@
 import { Controller, useForm } from 'react-hook-form'
-import { Eraser, Printer } from 'lucide-react'
+import { ChevronUp, Printer, Search } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table'
-import { products } from '../../lib/products'
-import { InputNumber } from '../../components/ui/input'
+import { productsSorted } from '../../lib/products'
+import { Input, InputNumber } from '../../components/ui/input'
 import calculateSuggestedPrice from '../../lib/suggestedPrice'
 import { getValues as getValuesCache, saveValues } from '../../lib/cache'
 import { Button } from '../../components/ui/button'
 import { createTablePrice } from '../../lib/createTablePrice'
+import { useState } from 'react'
 
 export default function Prices() {
+    const [filter, setFilter] = useState('')
 
     const { control, getValues } = useForm<Product>({
         defaultValues: JSON.parse(getValuesCache() || '{}')
     })
-
-    const resetValues = () => {
-        saveValues('{}')
-        window.location.reload()
-    }
 
     const print = () => {
         const printWindow = window.open('', 'Print', 'height=400,width=600')
@@ -31,24 +28,27 @@ export default function Prices() {
     return (
         <div className='flex flex-col items-center justify-center my-4'>
 
-            <div className='sm:max-w-[600px] bg-white shadow-lg sm:m-4 rounded-lg'>
+            <div className='sm:max-w-[500px] w-full bg-white shadow-lg sm:m-4 rounded-lg'>
                 <div className='border-b p-4 grid gap-4'>
                     <div>
                         <h1 className='font-semibold tracking-tight text-2xl'>Cálculo de Preços</h1>
                         <p className='text-sm text-gray-600'>Determinação do preço sugerido com base no valor de custo</p>
                     </div>
                     <div className='flex gap-4'>
+                        <div className='relative flex-1'>
+                            <Search className='absolute left-2.5 h-full w-4 text-muted-foreground' />
+                            <Input
+                                type='search'
+                                placeholder='Buscar nome do produto'
+                                className='w-full rounded-lg bg-background pl-8'
+                                value={filter}
+                                onChange={(e) => setFilter(e.target.value)}
+                            />
+                        </div>
                         <Button
                             onClick={print}
-                            className='flex-1'
                         >
-                            <Printer className='w-4 h-4 mr-2' /> Imprimir
-                        </Button>
-                        <Button
-                            onClick={resetValues}
-                            variant={'secondary'}
-                        >
-                            <Eraser className='w-4 h-4 mr-2' /> Limpar lista
+                            <Printer className='w-4 h-4 mr-2 ' /> Imprimir
                         </Button>
                     </div>
                 </div>
@@ -61,9 +61,12 @@ export default function Prices() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {products.map((productName, id) => (
+                        {productsSorted.filter(item => {
+                            if (!filter) return true
+                            return item.name.toLowerCase().includes(filter.toLowerCase())
+                        }).map(({ id, name }) => (
                             <TableRow key={id}>
-                                <TableCell className='font-medium'>{productName}</TableCell>
+                                <TableCell className='font-medium'>{name}</TableCell>
                                 <Controller
                                     control={control}
                                     name={`product${id}`}
@@ -119,6 +122,14 @@ export default function Prices() {
                         ))}
                     </TableBody>
                 </Table>
+            </div>
+            <div className='fixed bottom-0 right-0 p-4'>
+                <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className='bg-gray-900 hover:bg-gray-800 duration-500 transition-all text-white rounded-full w-10 h-10 flex items-center justify-center'
+                >
+                    <ChevronUp className='h-6 w-6' />
+                </button>
             </div>
             <p className='text-gray-400'>{new Date().getFullYear()} - <a className='hover:underline' href='https://github.com/xfelipesobral/frutas-precos'>Github</a></p>
         </div>
