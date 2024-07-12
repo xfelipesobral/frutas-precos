@@ -1,19 +1,16 @@
 import { Controller, useForm } from 'react-hook-form'
+import { Eraser, Printer } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table'
 import { products } from '../../lib/products'
 import { InputNumber } from '../../components/ui/input'
 import calculateSuggestedPrice from '../../lib/suggestedPrice'
 import { getValues as getValuesCache, saveValues } from '../../lib/cache'
 import { Button } from '../../components/ui/button'
-import { Eraser, Printer } from 'lucide-react'
-
-interface Form {
-    [key: string]: { paid: string, suggested: string }
-}
+import { createTablePrice } from '../../lib/createTablePrice'
 
 export default function Prices() {
 
-    const { control, getValues } = useForm<Form>({
+    const { control, getValues } = useForm<Product>({
         defaultValues: JSON.parse(getValuesCache() || '{}')
     })
 
@@ -26,19 +23,18 @@ export default function Prices() {
         const printWindow = window.open('', 'Print', 'height=400,width=600')
         if (!printWindow) return
 
-        printWindow.document.write('<p>Printed</p>')
+        printWindow.document.write(createTablePrice(getValues()))
         printWindow.print()
         printWindow.close()
-
     }
 
     return (
         <div className='flex flex-col items-center justify-center my-4'>
 
-            <div className='sm:max-w-[500px] bg-white shadow-lg sm:m-4 rounded-lg'>
+            <div className='sm:max-w-[600px] bg-white shadow-lg sm:m-4 rounded-lg'>
                 <div className='border-b p-4 grid gap-4'>
                     <div>
-                        <h1 className='font-semibold tracking-tight text-2xl'>Cálculo de Produtos</h1>
+                        <h1 className='font-semibold tracking-tight text-2xl'>Cálculo de Preços</h1>
                         <p className='text-sm text-gray-600'>Determinação do preço sugerido com base no valor de custo</p>
                     </div>
                     <div className='flex gap-4'>
@@ -97,7 +93,7 @@ export default function Prices() {
 
                                         return (
                                             <>
-                                                <TableCell>
+                                                <TableCell className='max-w-[170px]'>
                                                     <InputNumber
                                                         placeholder='0.00'
                                                         className='text-right'
@@ -106,7 +102,7 @@ export default function Prices() {
                                                         onChange={(e) => handleChange('paid', e.target.value)}
                                                     />
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell className='max-w-[170px]'>
                                                     <InputNumber
                                                         placeholder='0.00'
                                                         className='text-right'
@@ -124,6 +120,7 @@ export default function Prices() {
                     </TableBody>
                 </Table>
             </div>
+            <p className='text-gray-400'>{new Date().getFullYear()} - <a className='hover:underline' href='https://github.com/xfelipesobral/frutas-precos'>Github</a></p>
         </div>
     )
 }

@@ -6,7 +6,7 @@ export const products = [
     'Acelga',
     'Alho',
     'Ameixa',
-    'Banana 16Kg Col',
+    'Banana 16Kg Col.',
     'Banana Maçã',
     'Banann Prata',
     'Batata',
