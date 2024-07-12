@@ -8,7 +8,7 @@ export const products = [
     { id: '7', name: 'Ameixa' },
     { id: '8', name: 'Banana 16Kg' },
     { id: '9', name: 'Banana Maçã' },
-    { id: '10', name: 'Banann Prata' },
+    { id: '10', name: 'Banana Prata' },
     { id: '11', name: 'Batata' },
     { id: '12', name: 'Batata Doce' },
     { id: '13', name: 'Batata Salsa' },
