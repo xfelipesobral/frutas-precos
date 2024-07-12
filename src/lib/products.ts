@@ -6,7 +6,7 @@ export const products = [
     { id: '5', name: 'Acelga' },
     { id: '6', name: 'Alho' },
     { id: '7', name: 'Ameixa' },
-    { id: '8', name: 'Banana 16Kg Col.' },
+    { id: '8', name: 'Banana 16Kg' },
     { id: '9', name: 'Banana Maçã' },
     { id: '10', name: 'Banann Prata' },
     { id: '11', name: 'Batata' },
