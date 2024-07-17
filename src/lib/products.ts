@@ -65,6 +65,7 @@ export const products = [
     { id: '64', name: 'Vagem' },
     { id: '65', name: 'Inhame' },
     { id: '66', name: 'Ovo' },
+    { id: '67', name: 'Pamonha' }
 ]
 
 export const productsSorted = products.sort((a, b) => a.name.localeCompare(b.name))
